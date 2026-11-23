@@ -1,0 +1,41 @@
+# Render Blueprint – https://render.com/docs/blueprint-spec
+# Dashboard → New → Blueprint → select this repo. Fill in the "sync: false" values when prompted.
+services:
+  - type: web
+    name: masstech-api
+    runtime: node
+    region: singapore        # closest Render region to Mongolia
+    plan: free               # free sleeps after 15 min idle (~50 s cold start). "starter" stays awake.
+    buildCommand: npm ci && npm run build
+    startCommand: npm start  # runs DB migrations, then starts the server
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL       # Neon → Connection string (pooled), ends with ?sslmode=require
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://masstech.mn,https://www.masstech.mn
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_FOLDER
+        value: masstech
+      - key: RESEND_API_KEY
+        sync: false
+      - key: CONTACT_TO_EMAIL
+        value: info@masstech.mn
+      - key: CONTACT_FROM_EMAIL
+        sync: false
